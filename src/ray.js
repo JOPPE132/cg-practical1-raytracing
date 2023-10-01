@@ -3,8 +3,16 @@ class Ray {
         this.origin = origin;
         this.direction = direction;
     }
-    
+
+    getOrigin() {
+        return this.origin;
+    }
+
+    getDirection() {
+        return this.direction;
+    }
+
     at(t) {
-        //TODO
+        return this.getOrigin() + (t * this.getDirection());
     }
 }

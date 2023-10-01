@@ -1,5 +1,5 @@
 firstImage();
-//blueWhiteGradient();
+blueWhiteGradient();
 //redSphere();
 //normalsSphere();
 //sphereAndGround();
@@ -28,7 +28,16 @@ function firstImage() {
 }
 
 function blueWhiteGradient() {
-    //TODO
+
+    function rayToColor(ray) {
+
+    }
+   const u = new Vec3(1,1,1);
+   const v = new Vec3(-2,8-9);
+   const ray = new Ray(u,v);
+    console.log(rayToColor(ray));
+    }
+    displayImage(imageWidth, imageHeight, image);
 }
 
 function redSphere() {

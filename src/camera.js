@@ -9,6 +9,6 @@ class Camera {
     lowerLeftCorner = this.origin.subtract(this.horizontal.multiply(0.5)).subtract(this.vertical.multiply(0.5)).subtract(new Vec3(0, 0, this.focalLength));
 
     getRay(u, v) {
-        //TODO
+        return Ray(this.origin, this.lowerLeftCorner + u * this.horizontal + v * this.vertical - this.origin);
     }
 }
