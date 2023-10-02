@@ -26,6 +26,10 @@ class Vec3 {
     unitVector() {
         return new Vec3(this.x/this.length(), this.y/this.length(), this.z/this.length());
     }
+
+    getY(){
+        return this.y;
+    }
     dot(v) {
         return (this.x * v.x) + (this.y * v.y) + (this.z * v.z);
     }

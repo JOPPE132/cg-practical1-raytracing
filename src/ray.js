@@ -13,6 +13,10 @@ class Ray {
     }
 
     at(t) {
-        return this.getOrigin() + (t * this.getDirection());
+        return new Vec3(
+            this.getOrigin().x + t * this.getDirection().x,
+            this.getOrigin().y + t * this.getDirection().y,
+            this.getOrigin().z + t * this.getDirection().z
+        );
     }
 }
