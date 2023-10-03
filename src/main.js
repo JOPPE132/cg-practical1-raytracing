@@ -1,7 +1,7 @@
 //firstImage();
 //blueWhiteGradient();
-redSphere();
-//normalsSphere();
+//redSphere(); //Something wrong with the aspect ratio of camera?
+normalsSphere();
 //sphereAndGround();
 //antialiasing();
 //diffuseSphere();
@@ -27,7 +27,6 @@ function firstImage() {
     }
     displayImage(imageWidth, imageHeight, image);
 }
-
 
 function blueWhiteGradient() {
     const imageWidth = 256;
@@ -75,13 +74,6 @@ function blueWhiteGradient() {
     }
     displayImage(imageWidth, imageHeight, image);
 }
-
-
-
-
-
-
-
 
 function redSphere() {
     const imageWidth = 256;
@@ -157,8 +149,84 @@ function redSphere() {
 
 
 function normalsSphere() {
-    //TODO
+    const imageWidth = 256;
+    const imageHeight = 256;
+    const image = [];
+
+    const camera = new Camera();
+    const lowerLeftCorner = camera.lowerLeftCorner;
+    const horizontal = camera.horizontal;
+    const vertical = camera.vertical;
+    const origin = camera.origin;
+    const newOrigin = new Vec3(0,0.0,-1);
+
+    function hitSphere(center, radius, ray) {
+        const oc = ray.origin.subtract(center);
+        const a = ray.direction.dot(ray.direction);
+        const b = 2.0 * oc.dot(ray.direction);
+        const c = oc.dot(oc) - radius * radius;
+        const discriminant = b * b - 4 * a * c;
+        if(discriminant < 0){
+            return -1.0;
+        } else{
+            return (-b - Math.sqrt(discriminant)) / (2.0*a);
+        }
+    }
+
+    function rayColor(ray) {
+        const t = hitSphere(new Vec3(0, 0, -1), 0.5, ray);
+
+        if (t > 0.0) {
+            const hitPoint = ray.at(t).subtract(new Vec3(0, 0, -1));
+            const N = hitPoint.unitVector();
+            return N.multiply(0.5).add(new Vec3(0.6, 0.5, 1));
+        }
+
+        const unitDirection = ray.getDirection().unitVector();
+        const t2 = 0.5 * (unitDirection.y + 1.0);
+
+        return new Vec3(1.0, 1.0, 1.0).multiply(1.0 - t2).add(new Vec3(0.5, 0.7, 1.0).multiply(t2));
+    }
+
+    for (let j = imageHeight - 1; j >= 0; --j) {
+        console.log("Scanlines remaining: " + j);
+        for (let i = 0; i < imageWidth; ++i) {
+            const u = i / (imageWidth - 1);
+            const v = j / (imageHeight - 1);
+
+            // Create a ray from the camera
+            const direction = lowerLeftCorner.add(horizontal.multiply(u)).add(vertical.multiply(v)).subtract(origin);
+            const ray = new Ray(origin, direction);
+
+            // Calculate the pixel color using ray tracing
+            const pixelColor = rayColor(ray);
+
+            const pixel = [];
+            pixel.push(pixelColor.x);
+            pixel.push(pixelColor.y);
+            pixel.push(pixelColor.z);
+
+            image.push(pixel);
+        }
+    }
+    displayImage(imageWidth, imageHeight, image);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function sphereAndGround() {
     //TODO
