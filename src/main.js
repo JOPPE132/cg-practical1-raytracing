@@ -1,11 +1,13 @@
-firstImage();
-blueWhiteGradient();
-//redSphere();
+//firstImage();
+//blueWhiteGradient();
+redSphere();
 //normalsSphere();
 //sphereAndGround();
 //antialiasing();
 //diffuseSphere();
 //metalSpheres();
+
+
 
 function firstImage() {
     const imageWidth = 256;
@@ -32,12 +34,11 @@ function blueWhiteGradient() {
     const imageHeight = 256;
     const image = [];
 
-    const lowerLeftCorner = new Vec3(-2.0, -1.0, -1.0);
-    const horizontal = new Vec3(4.0, 0.0, 0.0);
-    const vertical = new Vec3(0.0, 2.0, 0.0);
-    const origin = new Vec3(0.0, 0.0, 0.0);
-
-
+    const camera = new Camera();
+    const lowerLeftCorner = camera.lowerLeftCorner;
+    const horizontal = camera.horizontal;
+    const vertical = camera.vertical;
+    const origin = camera.horizontal;
 
         function rayColor(ray) {
             const unitDirection = ray.getDirection().unitVector();
@@ -50,7 +51,6 @@ function blueWhiteGradient() {
 
              return pixelColor;
         }
-
 
     for (let j = imageHeight - 1; j >= 0; --j) {
         console.log("Scanlines remaining: " + j);
@@ -77,9 +77,84 @@ function blueWhiteGradient() {
 }
 
 
+
+
+
+
+
+
 function redSphere() {
-    //TODO
+    const imageWidth = 256;
+    const imageHeight = 256;
+    const image = [];
+
+    const camera = new Camera();
+    const lowerLeftCorner = camera.lowerLeftCorner;
+    const horizontal = camera.horizontal;
+    const vertical = camera.vertical;
+    const origin = camera.origin;
+    const newOrigin = new Vec3(0,0.0,-1);
+
+    function hitSphere(center, radius, ray) {
+        const oc = ray.origin.subtract(center);
+        const a = ray.direction.dot(ray.direction);
+        const b = 2.0 * oc.dot(ray.direction);
+        const c = oc.dot(oc) - radius * radius;
+        const discriminant = b * b - 4 * a * c;
+        return discriminant > 0;
+    }
+
+    function rayColor(ray) {
+        if(hitSphere(newOrigin, 0.5, ray)){
+            return new Vec3(1,0,0); //Return new color
+        }
+
+        const unitDirection = ray.getDirection().unitVector();
+        const t = 0.5 * (unitDirection.getY() + 1.0);
+
+        const white = new Vec3(1.0, 1.0, 1.0);
+        const blue = new Vec3(0.5, 0.7, 1.0);
+
+        const pixelColor = white.multiply(1.0 - t).add(blue.multiply(t));
+
+        return pixelColor;
+    }
+
+    for (let j = imageHeight - 1; j >= 0; --j) {
+        console.log("Scanlines remaining: " + j);
+        for (let i = 0; i < imageWidth; ++i) {
+            const u = i / (imageWidth - 1);
+            const v = j / (imageHeight - 1);
+
+            // Create a ray from the camera
+            const direction = lowerLeftCorner.add(horizontal.multiply(u)).add(vertical.multiply(v)).subtract(origin);
+            const ray = new Ray(origin, direction);
+
+            // Calculate the pixel color using ray tracing
+            const pixelColor = rayColor(ray);
+
+            const pixel = [];
+            pixel.push(pixelColor.x);
+            pixel.push(pixelColor.y);
+            pixel.push(pixelColor.z);
+
+            image.push(pixel);
+        }
+    }
+    displayImage(imageWidth, imageHeight, image);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 function normalsSphere() {
     //TODO
