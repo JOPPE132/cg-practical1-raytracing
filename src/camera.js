@@ -1,5 +1,5 @@
 class Camera {
-    aspectRatio = 16.0 / 9.0;
+    aspectRatio = 10.0 / 9.0;
     viewportHeight = 2.0;
     viewportWidth = this.aspectRatio * this.viewportHeight;
     focalLength = 1.0;

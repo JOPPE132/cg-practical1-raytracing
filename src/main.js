@@ -2,8 +2,8 @@
 //blueWhiteGradient();
 //redSphere(); //Something wrong with the aspect ratio of camera?
 //normalsSphere();
-sphereAndGround();
-//antialiasing();
+//sphereAndGround();
+antialiasing();
 //diffuseSphere();
 //metalSpheres();
 
@@ -308,8 +308,92 @@ function sphereAndGround() {
     displayImage(imageWidth, imageHeight, image);
 }
 
+
+
+
+
+
+
+
+
+
+
 function antialiasing() {
-    // todo
+    //Image
+const imageWidth = 256;
+const imageHeight = 256;
+const samplesPerPixel = 100; // Number of samples per pixel
+const image = [];
+
+//Camera
+const camera = new Camera();
+const lowerLeftCorner = camera.lowerLeftCorner;
+const horizontal = camera.horizontal;
+const vertical = camera.vertical;
+const origin = camera.origin;
+
+//World
+const world = new World();
+const sphere1 = new Sphere(new Vec3(0, 0, -1), 0.5);
+const sphere2 = new Sphere(new Vec3(0, -100.5, -1), 100);
+world.add(sphere1);
+world.add(sphere2);
+
+//Hitsphere function
+function hitSphere(center, radius, ray) {
+    const oc = ray.origin().subtract(center);
+    const a = ray.direction().lengthSquared();
+    const half_b = oc.dot(ray.direction());
+    const c = oc.lengthSquared() - radius * radius;
+    const discriminant = half_b * half_b - a * c;
+    if (discriminant < 0) {
+        return -1.0;
+    } else {
+        return (-half_b - Math.sqrt(discriminant)) / a;
+    }
+}
+
+//Raycolor funciton
+// ...
+
+//Raycolor funciton
+function rayColor(ray, world) {
+    let pixelColor = new Vec3(0, 0, 0);
+
+    for (let s = 0; s < samplesPerPixel; ++s) {
+        const u = (i + Math.random()) / (imageWidth - 1);
+        const v = (j + Math.random()) / (imageHeight - 1);
+
+        const direction = lowerLeftCorner.add(horizontal.multiply(u)).add(vertical.multiply(v)).subtract(origin);
+        ray = new Ray(origin, direction);
+
+        pixelColor = pixelColor.add(rayColor(ray, world));
+    }
+
+    // Average the color by dividing by the number of samples
+    pixelColor = pixelColor.divide(samplesPerPixel);
+
+    return pixelColor;
+}
+
+// ...
+
+
+for (let j = imageHeight - 1; j >= 0; --j) {
+    console.log("Scanlines remaining: " + j);
+    for (let i = 0; i < imageWidth; ++i) {
+        const pixelColor = rayColor(ray, world);
+
+        const pixel = [];
+        pixel.push(pixelColor.x);
+        pixel.push(pixelColor.y);
+        pixel.push(pixelColor.z);
+
+        image.push(pixel);
+    }
+}
+displayImage(imageWidth, imageHeight, image);
+
 }
 
 function diffuseSphere() {
