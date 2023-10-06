@@ -31,6 +31,11 @@ class Vec3 {
         return this.y;
     }
 
+    divide(scalar) {
+        return new Vec3(this.x / scalar, this.y / scalar, this.z / scalar);
+    }
+
+
     dot(v) {
         return (this.x * v.x) + (this.y * v.y) + (this.z * v.z);
     }
