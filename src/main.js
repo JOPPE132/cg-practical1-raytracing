@@ -4,7 +4,7 @@
 //normalsSphere();
 //sphereAndGround();
 //antialiasing();
-diffuseSphere();
+//diffuseSphere();
 //metalSpheres();
 
 function firstImage() {
@@ -403,7 +403,7 @@ function diffuseSphere() {
                 const u = (i + Math.random()) / (imageWidth - 1);
                 const v = (j + Math.random()) / (imageHeight - 1);
 
-                // Create a ray from the camera
+                //Create a ray from the camera
                 const direction = lowerLeftCorner
                     .add(horizontal.multiply(u))
                     .add(vertical.multiply(v))
@@ -416,6 +416,11 @@ function diffuseSphere() {
 
             //Average the pixel colors
             pixelColor = pixelColor.divide(number_of_pixels);
+
+            //Gamma correction if wanted
+            //pixelColor.x = Math.sqrt(pixelColor.x);
+            //pixelColor.y = Math.sqrt(pixelColor.y);
+            //pixelColor.z = Math.sqrt(pixelColor.z);
 
             //Create pixel array then push it into the image
             const pixel = [];
@@ -430,5 +435,5 @@ function diffuseSphere() {
 
 
 function metalSpheres() {
-
+    // TODO
 }

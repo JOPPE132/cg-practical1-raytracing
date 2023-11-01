@@ -31,6 +31,10 @@ class Vec3 {
         return new Vec3(this.x/this.length(), this.y/this.length(), this.z/this.length());
     }
 
+    random_unit_vector(){
+
+    }
+
     getY() {
         return this.y;
     }
