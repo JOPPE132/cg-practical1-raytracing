@@ -4,7 +4,7 @@
 //normalsSphere();
 //sphereAndGround();
 //antialiasing();
-//diffuseSphere();
+diffuseSphere();
 //metalSpheres();
 
 function firstImage() {
@@ -342,7 +342,90 @@ function antialiasing() {
 }
 
 function diffuseSphere() {
-    //TODO
+    //Initialize image width, height and array to store the data
+    const imageWidth = 256;
+    const imageHeight = 256;
+    const image = [];
+    const number_of_pixels = 100;
+    const max_depth = 50;
+
+    //Create a camera object and gather its properties
+    const camera = new Camera();
+    const lowerLeftCorner = camera.lowerLeftCorner;
+    const horizontal = camera.horizontal;
+    const vertical = camera.vertical;
+    const origin = camera.origin;
+
+    //Create a world object and push spheres to the objects array
+    const world = new World();
+    const sphere1 = new Sphere(new Vec3(0, 0, -1), 0.5);
+    const sphere2 = new Sphere(new Vec3(0, -100.5, -1), 100);
+    world.add(sphere1);
+    world.add(sphere2);
+
+    //Utility class to generate random point in sphere
+    function randomInSphere(){
+        while(true){
+            const p = Vec3.random(-1,1);
+            if(p.squaredLength() >= 1) continue;
+            return p;
+        }
+    }
+
+    //Compute color based on rays direction
+    function rayColor(ray, world, depth) {
+        const rec = world.hit(ray, 0, Infinity);
+
+        if(depth <= 0){
+            return new Vec3(0,0,0);
+        }
+
+        if (rec && rec.hit) {
+            const target = rec.point.add(rec.normal).add(randomInSphere());
+            return rayColor(new Ray(rec.point, target.subtract(rec.point)), world, depth - 1).scale(0.5);
+        }
+
+        const unitDirection = ray.getDirection().unitVector();
+        const t = 0.5 * (unitDirection.getY() + 1.0);
+        const white = new Vec3(1.0, 1.0, 1.0);
+        const blue = new Vec3(0.5, 0.7, 1.0);
+
+        return white.multiply(1.0 - t).add(blue.multiply(t));
+    }
+
+    //Generate image by casting rays from the camera and calculate color
+    for (let j = imageHeight - 1; j >= 0; --j) {
+        console.log("Scanlines remaining: " + j);
+        for (let i = 0; i < imageWidth; ++i) {
+            let pixelColor = new Vec3(0, 0, 0);
+
+            for (let s = 0; s < number_of_pixels; ++s) {
+                const u = (i + Math.random()) / (imageWidth - 1);
+                const v = (j + Math.random()) / (imageHeight - 1);
+
+                // Create a ray from the camera
+                const direction = lowerLeftCorner
+                    .add(horizontal.multiply(u))
+                    .add(vertical.multiply(v))
+                    .subtract(origin);
+                const ray = new Ray(origin, direction);
+
+                //Calculate the pixel color
+                pixelColor = pixelColor.add(rayColor(ray, world, max_depth));
+            }
+
+            //Average the pixel colors
+            pixelColor = pixelColor.divide(number_of_pixels);
+
+            //Create pixel array then push it into the image
+            const pixel = [];
+            pixel.push(pixelColor.x);
+            pixel.push(pixelColor.y);
+            pixel.push(pixelColor.z);
+            image.push(pixel);
+        }
+    }
+    displayImage(imageWidth, imageHeight, image);
 }
 
 

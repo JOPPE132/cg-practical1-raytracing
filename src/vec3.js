@@ -5,6 +5,10 @@ class Vec3 {
         this.z = z;
     }
 
+    scale(scalar){
+        return new Vec3(this.x * scalar, this.y * scalar, this.z * scalar);
+    }
+
     add(v) { 
         return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
     }
