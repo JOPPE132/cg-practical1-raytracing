@@ -346,8 +346,8 @@ function diffuseSphere() {
     const imageWidth = 256;
     const imageHeight = 256;
     const image = [];
-    const number_of_pixels = 100;
-    const max_depth = 50;
+    const number_of_pixels = 50;
+    const max_depth = 20;
 
     //Create a camera object and gather its properties
     const camera = new Camera();
@@ -382,7 +382,7 @@ function diffuseSphere() {
 
         if (rec && rec.hit) {
             const target = rec.point.add(rec.normal).add(randomInSphere());
-            return rayColor(new Ray(rec.point, target.subtract(rec.point)), world, depth - 1).scale(0.5);
+            return rayColor(new Ray(rec.point, target.subtract(rec.point)), world, depth - 1);
         }
 
         const unitDirection = ray.getDirection().unitVector();
@@ -430,5 +430,5 @@ function diffuseSphere() {
 
 
 function metalSpheres() {
-    //TODO
+
 }

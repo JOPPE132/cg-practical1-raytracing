@@ -7,7 +7,6 @@
     <list default="true" id="1633fd1e-3b68-42d1-9beb-f89a4d8c9f09" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vec3.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/vec3.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +53,7 @@
       <workItem from="1696398319596" duration="14000" />
       <workItem from="1696498673797" duration="2590000" />
       <workItem from="1696573966958" duration="9361000" />
-      <workItem from="1698747555774" duration="4458000" />
+      <workItem from="1698747555774" duration="6872000" />
     </task>
     <servers />
   </component>
